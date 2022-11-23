@@ -1,0 +1,35 @@
+create table chef (ceduchef varchar(10) primary key not null, nomchef varchar(100), telechef varchar(10), titulos varchar(100), experienchef varchar(100));
+
+create table bodega (codibodega varchar(10) primary key not null, producentrega date, infoproduc varchar(500),cantiproducto varchar(10000));
+
+create table combo (codicombo varchar(10) primary key not null, nomcombo varchar(200), porciocombo varchar(100), preciocombo varchar(500));
+
+create table camarero (ceducamare varchar(10) primary key not null, nomcamare varchar(100), telecamare varchar(10), experiencamare varchar(100));
+
+create table cliente (ceducliente varchar(10) primary key not null, nomcliente varchar(120), telecliente varchar(10), correocliente varchar(150), direccliente varchar(300));
+
+create table mesas (codimesa varchar(10) primary key not null, ceducamarefk varchar(10), estadomesa varchar(100), asientosmesa varchar(10), 
+foreign key (ceducamarefk) references camarero(ceducamare));
+
+create table factura (numfactu varchar(10) primary key not null, ceduclientefk varchar(10), verififactura varchar(10), fechafactu date, totalfactu decimal, descufactu decimal, iva decimal, estadofactu varchar(100), 
+foreign key (ceduclientefk) references cliente(ceducliente));
+
+create table reservamesa (codiresermesa varchar(10) primary key not null, ceduclientefk varchar(10), 
+codimesafk varchar(10), fecharesermesa date, observaresermesa varchar(100), estadoresermesa varchar(100), ocuparesermesa varchar(50), precioreserva varchar(1000), propinareserva varchar (100),
+foreign key (ceduclientefk) references cliente(ceducliente),
+foreign key (codimesafk) references mesas(codimesa));
+
+create table alimentos (codialimentos varchar(10) primary key not null, ceducheffk varchar(10), codibodegafk varchar(10), aliutilizado varchar(500), porcionemplea varchar(40),
+foreign key (ceducheffk) references chef(ceduchef),
+foreign key (codibodegafk) references bodega(codibodega));
+
+create table platos (codiplato varchar(10) primary key not null, ceducamarefk varchar(10), 
+codicombofk varchar(10), ceducheffk varchar(10), nomplato varchar(150), caracteplato varchar(300), precioplato decimal , estadoplato varchar(30), producirprecio decimal,
+foreign key (ceducamarefk) references camarero(ceducamare),
+foreign key (codicombofk) references combo(codicombo),
+foreign key (ceducheffk) references chef(ceduchef));
+
+create table detafactura (codiplatofk varchar(10), numfactufk varchar(10),
+canti integer, precio decimal, subtotal decimal, estadofactu varchar(50),
+foreign key (codiplatofk) references platos(codiplato),
+foreign key (numfactufk) references factura(numfactu));
